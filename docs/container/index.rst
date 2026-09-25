@@ -66,6 +66,12 @@ And async:
 
 When you exit the scope, dependency cache is cleared. Finalization of dependencies is done if you used generator factories.
 
+Finalization is deterministic:
+
+* dependencies of a scope are finalized in the reverse order of their creation;
+* a failure in one finalizer does not prevent others from running, all errors are collected and raised as a single ``ExitError`` (an ``ExceptionGroup``) when the container is closed;
+* when scopes are nested, an inner scope is finalized before its parent scope.
+
 *APP*-level container is not a context manager, so call ``.close()`` on your app termination:
 
 .. code-block:: python
